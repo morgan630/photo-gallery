@@ -1,150 +1,441 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Photo Gallery</title>
+
+    <title>Event Photo Booth</title>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 30px 15px;
-            background: #f5f5f5;
+            padding: 0;
         }
 
-        h1 {
-            margin-bottom: 10px;
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f4f5;
+            color: #18181b;
+            min-height: 100vh;
         }
 
-        p {
-            color: #555;
-        }
+        /* HEADER */
 
-        .upload-button {
-            display: inline-block;
-            padding: 15px 25px;
-            background: #222;
+        .hero {
+            background: #111111;
             color: white;
-            border-radius: 10px;
+            padding: 45px 20px 55px;
+            text-align: center;
+        }
+
+        .hero .small-title {
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.65;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            font-size: 15px;
+            color: #d4d4d8;
+            line-height: 1.6;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        /* MAIN */
+
+        .container {
+            max-width: 850px;
+            margin: -30px auto 40px;
+            padding: 0 16px;
+        }
+
+        /* CAMERA CARD */
+
+        .camera-card {
+            background: white;
+            border-radius: 22px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+        }
+
+        .camera-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 18px;
+            background: #f1f1f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .camera-card h2 {
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
+
+        .camera-card p {
+            color: #71717a;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        /* BUTTON */
+
+        .camera-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
+            padding: 17px 25px;
+            background: #111111;
+            color: white;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 18px;
-            margin: 20px 0;
+            transition: 0.2s;
+        }
+
+        .camera-button:hover {
+            background: #333333;
+            transform: translateY(-2px);
+        }
+
+        .camera-button:active {
+            transform: scale(0.98);
         }
 
         input[type="file"] {
             display: none;
         }
 
-        #gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            max-width: 1000px;
-            margin: 20px auto;
-        }
-
-        #gallery img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
+        /* STATUS */
 
         #status {
-            margin: 15px;
-            font-weight: bold;
+            margin-top: 18px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        /* GALLERY HEADER */
+
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 35px 5px 15px;
+        }
+
+        .gallery-header h2 {
+            font-size: 22px;
+        }
+
+        .gallery-header span {
+            font-size: 13px;
+            color: #71717a;
+        }
+
+        /* GALLERY */
+
+        #gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .photo {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #e4e4e7;
+            transition: 0.2s;
+        }
+
+        .photo:hover {
+            transform: scale(1.02);
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            color: #a1a1aa;
+            font-size: 12px;
+            padding: 20px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            .hero {
+                padding: 38px 20px 50px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .camera-card {
+                padding: 28px 18px;
+            }
+
+            #gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 7px;
+            }
+
+            .photo {
+                border-radius: 10px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <h1>📸 Event Photo Gallery</h1>
+    <!-- HERO -->
 
-    <p>Take a photo and upload it to the gallery.</p>
+    <section class="hero">
 
-    <label class="upload-button" for="photoInput">
-        📷 Take Photo
-    </label>
+        <div class="small-title">
+            Welcome
+        </div>
 
-    <input
-        type="file"
-        id="photoInput"
-        accept="image/*"
-        capture="camera"
-    >
+        <h1>Event Photo Booth</h1>
 
-    <div id="status"></div>
+        <p>
+            Capture the moment, share the memory,
+            and see everyone's photos in one place.
+        </p>
 
-    <div id="gallery"></div>
+    </section>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+        <!-- CAMERA -->
+
+        <div class="camera-card">
+
+            <div class="camera-icon">
+                📸
+            </div>
+
+            <h2>Capture Your Moment</h2>
+
+            <p>
+                Take a photo and share it with everyone at the event.
+            </p>
+
+            <label class="camera-button" for="photoInput">
+                📷 &nbsp; TAKE A PHOTO
+            </label>
+
+            <input
+                type="file"
+                id="photoInput"
+                accept="image/*"
+                capture="environment"
+            >
+
+            <div id="status"></div>
+
+        </div>
+
+
+        <!-- GALLERY -->
+
+        <div class="gallery-header">
+
+            <h2>Event Gallery</h2>
+
+            <span id="photoCount">
+                Photos
+            </span>
+
+        </div>
+
+        <div id="gallery"></div>
+
+    </main>
+
+
+    <footer>
+        Made for unforgettable moments ✨
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
 
     <script>
 
-        // YOUR CLOUDINARY INFORMATION
-        const CLOUD_NAME = "aiv9r6zk";
+        /* CLOUDINARY SETTINGS */
+
+        const CLOUD_NAME = "YOUR_CLOUD_NAME";
         const UPLOAD_PRESET = "Event Photo";
 
-        const photoInput = document.getElementById("photoInput");
-        const gallery = document.getElementById("gallery");
-        const status = document.getElementById("status");
 
-        photoInput.addEventListener("change", async function () {
+        /* ELEMENTS */
 
-            const file = this.files[0];
+        const photoInput =
+            document.getElementById("photoInput");
 
-            if (!file) {
-                return;
-            }
+        const gallery =
+            document.getElementById("gallery");
 
-            status.textContent = "Uploading photo...";
+        const status =
+            document.getElementById("status");
 
-            const formData = new FormData();
+        const photoCount =
+            document.getElementById("photoCount");
 
-            formData.append("file", file);
-            formData.append("upload_preset", UPLOAD_PRESET);
 
-            try {
+        let uploadedPhotos = 0;
 
-                const response = await fetch(
-                    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-                    {
-                        method: "POST",
-                        body: formData
-                    }
-                );
 
-                const data = await response.json();
+        /* PHOTO UPLOAD */
 
-                if (data.secure_url) {
+        photoInput.addEventListener(
+            "change",
+            async function () {
 
-                    const image = document.createElement("img");
+                const file = this.files[0];
 
-                    image.src = data.secure_url;
-
-                    gallery.prepend(image);
-
-                    status.textContent = "✅ Photo uploaded successfully!";
-
-                } else {
-
-                    status.textContent = "❌ Upload failed.";
-
-                    console.log(data);
+                if (!file) {
+                    return;
                 }
 
-            } catch (error) {
 
-                console.error(error);
+                status.textContent =
+                    "Uploading your photo...";
 
-                status.textContent = "❌ Something went wrong.";
+
+                const formData =
+                    new FormData();
+
+
+                formData.append(
+                    "file",
+                    file
+                );
+
+
+                formData.append(
+                    "upload_preset",
+                    UPLOAD_PRESET
+                );
+
+                formData.append(
+                    "tags",
+                    "event_gallery"
+                );
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+                            {
+                                method: "POST",
+                                body: formData
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (data.secure_url) {
+
+                        addPhoto(
+                            data.secure_url
+                        );
+
+
+                        uploadedPhotos++;
+
+
+                        photoCount.textContent =
+                            uploadedPhotos +
+                            (uploadedPhotos === 1
+                                ? " Photo"
+                                : " Photos");
+
+
+                        status.textContent =
+                            "✓ Photo uploaded successfully!";
+
+
+                        photoInput.value = "";
+
+
+                    } else {
+
+                        console.log(data);
+
+                        status.textContent =
+                            "Unable to upload the photo.";
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    status.textContent =
+                        "Something went wrong. Please try again.";
+
+                }
 
             }
+        );
 
-        });
+
+        /* ADD PHOTO TO GALLERY */
+
+        function addPhoto(url) {
+
+            const image =
+                document.createElement("img");
+
+
+            image.src = url;
+
+            image.className = "photo";
+
+            image.loading = "lazy";
+
+
+            gallery.prepend(image);
+
+        }
 
     </script>
 
 </body>
 </html>
+```
