@@ -304,7 +304,7 @@
        CLOUDINARY SETTINGS
     ===================================== */
 
-    const CLOUD_NAME = "aiv9r6zk";
+    const cloudName = "aiv9r6zk";
 
     /*
      * IMPORTANT:
@@ -430,7 +430,7 @@
                 --------------------------------- */
 
                 const uploadUrl =
-                    `https://api.cloudinary.com/v1_1/${aiv9r6zk}/image/upload`;
+                    `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
 
                 console.log(
@@ -830,7 +830,7 @@
              */
 
             const listUrl =
-                `https://res.cloudinary.com/${aiv9r6zk}/image/list/tag/${encodeURIComponent(GALLERY_TAG)}.json?${Date.now()}`;
+                `https://res.cloudinary.com/${cloudName}/image/list/tag/${encodeURIComponent(GALLERY_TAG)}.json?${Date.now()}`;
 
 
             console.log(
@@ -916,7 +916,7 @@
                          */
 
                         let photoUrl =
-                            `https://res.cloudinary.com/${aiv9r6zk}/image/upload/${photo.public_id}`;
+                            `https://res.cloudinary.com/${cloudName}/image/upload/${photo.public_id}`;
 
 
                         /*
