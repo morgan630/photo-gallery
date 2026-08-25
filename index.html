@@ -336,7 +336,7 @@
 
                 formData.append(
                     "file",
-                    file
+                    compressedFile
                 );
 
 
@@ -365,7 +365,8 @@
 
                     const data =
                         await response.json();
-
+			
+			console.log(data);
 
                     if (data.secure_url) {
 
@@ -387,32 +388,115 @@
                         status.textContent =
                             "✓ Photo uploaded successfully!";
 
+			} else {
+			
+				console.error(data);
+				status.textContent =
+				"❌ Unable to upload the photo.";
+			}
+			
+		} catch (error) {
+			
+			console.error(error);
+
+			status.textContent =
+			"❌ Upload failed. Please try again.";
+		}
 
                         photoInput.value = "";
+		});
 
+			async function compressImage(file) {
 
-                    } else {
+    return new Promise((resolve, reject) => {
 
-                        console.log(data);
+        const img = new Image();
 
-                        status.textContent =
-                            "Unable to upload the photo.";
+        const reader = new FileReader();
 
-                    }
+        reader.onload = function (event) {
 
+            img.onload = function () {
 
-                } catch (error) {
+                const maxWidth = 1600;
+                const maxHeight = 1600;
 
-                    console.error(error);
+                let width = img.width;
+                let height = img.height;
 
-                    status.textContent =
-                        "Something went wrong. Please try again.";
+                if (width > maxWidth) {
 
+                    height =
+                        height * (maxWidth / width);
+
+                    width = maxWidth;
                 }
 
-            }
-        );
+                if (height > maxHeight) {
 
+                    width =
+                        width * (maxHeight / height);
+
+                    height = maxHeight;
+                }
+
+                const canvas =
+                    document.createElement("canvas");
+
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx =
+                    canvas.getContext("2d");
+
+                ctx.drawImage(
+                    img,
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+                canvas.toBlob(
+                    function (blob) {
+
+                        if (!blob) {
+                            reject(
+                                new Error(
+                                    "Compression failed"
+                                )
+                            );
+                            return;
+                        }
+
+                        resolve(
+                            new File(
+                                [blob],
+                                "event-photo.jpg",
+                                {
+                                    type: "image/jpeg"
+                                }
+                            )
+                        );
+
+                    },
+                    "image/jpeg",
+                    0.80
+                );
+
+            };
+
+            img.onerror = reject;
+
+            img.src = event.target.result;
+        };
+
+        reader.onerror = reject;
+
+        reader.readAsDataURL(file);
+
+    });
+}
 
         /* ADD PHOTO TO GALLERY */
 
