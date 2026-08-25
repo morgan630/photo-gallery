@@ -1,838 +1,1022 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Event Photo Booth</title>
+```
+<title>Event Photo Booth</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f4f5;
-            color: #18181b;
-            min-height: 100vh;
-        }
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f4f5;
+        color: #18181b;
+        min-height: 100vh;
+    }
+
+    .hero {
+        background:
+            linear-gradient(
+                rgba(0, 0, 0, 0.45),
+                rgba(0, 0, 0, 0.45)
+            ),
+            #111111;
+
+        color: white;
+        padding: 45px 20px 55px;
+        text-align: center;
+    }
+
+    .small-title {
+        font-size: 13px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        opacity: 0.7;
+        margin-bottom: 12px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+        margin-bottom: 12px;
+    }
+
+    .hero p {
+        font-size: 15px;
+        color: #d4d4d8;
+        line-height: 1.6;
+        max-width: 420px;
+        margin: auto;
+    }
+
+    .container {
+        max-width: 850px;
+        margin: -30px auto 40px;
+        padding: 0 16px;
+    }
+
+    .camera-card {
+        background: white;
+        border-radius: 22px;
+        padding: 30px 20px;
+        text-align: center;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .camera-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 18px;
+        background: #f1f1f1;
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 32px;
+    }
+
+    .camera-card h2 {
+        font-size: 23px;
+        margin-bottom: 8px;
+    }
+
+    .camera-card p {
+        color: #71717a;
+        font-size: 14px;
+        margin-bottom: 22px;
+    }
+
+    .camera-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        max-width: 400px;
+
+        margin: auto;
+        padding: 18px 25px;
+
+        background: #111111;
+        color: white;
+
+        border-radius: 14px;
+
+        font-size: 17px;
+        font-weight: bold;
+
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .camera-button:hover {
+        background: #333333;
+        transform: translateY(-2px);
+    }
+
+    .camera-button:active {
+        transform: scale(0.98);
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    #status {
+        margin-top: 18px;
+        font-size: 14px;
+        min-height: 20px;
+        line-height: 1.5;
+    }
+
+    .gallery-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        margin: 35px 5px 15px;
+    }
+
+    .gallery-header h2 {
+        font-size: 22px;
+    }
+
+    .gallery-header span {
+        font-size: 13px;
+        color: #71717a;
+    }
+
+    #gallery {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .photo {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+
+        border-radius: 12px;
+        background: #e4e4e7;
+
+        transition: 0.2s;
+    }
+
+    .photo:hover {
+        transform: scale(1.02);
+    }
+
+    footer {
+        text-align: center;
+        color: #a1a1aa;
+        font-size: 12px;
+        padding: 20px;
+    }
+
+    @media (max-width: 600px) {
 
         .hero {
-            background:
-                linear-gradient(
-                    rgba(0, 0, 0, 0.45),
-                    rgba(0, 0, 0, 0.45)
-                ),
-                #111111;
-
-            color: white;
-            padding: 45px 20px 55px;
-            text-align: center;
-        }
-
-        .small-title {
-            font-size: 13px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            opacity: 0.7;
-            margin-bottom: 12px;
+            padding: 38px 20px 50px;
         }
 
         .hero h1 {
-            font-size: 36px;
-            margin-bottom: 12px;
-        }
-
-        .hero p {
-            font-size: 15px;
-            color: #d4d4d8;
-            line-height: 1.6;
-            max-width: 420px;
-            margin: auto;
-        }
-
-        .container {
-            max-width: 850px;
-            margin: -30px auto 40px;
-            padding: 0 16px;
+            font-size: 30px;
         }
 
         .camera-card {
-            background: white;
-            border-radius: 22px;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
-        }
-
-        .camera-icon {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 18px;
-            background: #f1f1f1;
-            border-radius: 50%;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 32px;
-        }
-
-        .camera-card h2 {
-            font-size: 23px;
-            margin-bottom: 8px;
-        }
-
-        .camera-card p {
-            color: #71717a;
-            font-size: 14px;
-            margin-bottom: 22px;
-        }
-
-        .camera-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            width: 100%;
-            max-width: 400px;
-
-            margin: auto;
-            padding: 18px 25px;
-
-            background: #111111;
-            color: white;
-
-            border-radius: 14px;
-
-            font-size: 17px;
-            font-weight: bold;
-
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .camera-button:hover {
-            background: #333333;
-            transform: translateY(-2px);
-        }
-
-        .camera-button:active {
-            transform: scale(0.98);
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        #status {
-            margin-top: 18px;
-            font-size: 14px;
-            min-height: 20px;
-        }
-
-        .gallery-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            margin: 35px 5px 15px;
-        }
-
-        .gallery-header h2 {
-            font-size: 22px;
-        }
-
-        .gallery-header span {
-            font-size: 13px;
-            color: #71717a;
+            padding: 28px 18px;
         }
 
         #gallery {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 7px;
         }
 
         .photo {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-
-            border-radius: 12px;
-            background: #e4e4e7;
-
-            transition: 0.2s;
+            border-radius: 10px;
         }
+    }
+</style>
+```
 
-        .photo:hover {
-            transform: scale(1.02);
-        }
-
-        footer {
-            text-align: center;
-            color: #a1a1aa;
-            font-size: 12px;
-            padding: 20px;
-        }
-
-        @media (max-width: 600px) {
-
-            .hero {
-                padding: 38px 20px 50px;
-            }
-
-            .hero h1 {
-                font-size: 30px;
-            }
-
-            .camera-card {
-                padding: 28px 18px;
-            }
-
-            #gallery {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 7px;
-            }
-
-            .photo {
-                border-radius: 10px;
-            }
-        }
-    </style>
 </head>
-
 
 <body>
 
+```
+<!-- HEADER -->
 
-    <!-- HEADER -->
+<section class="hero">
 
-    <section class="hero">
+    <div class="small-title">
+        Welcome
+    </div>
 
-        <div class="small-title">
-            Welcome
+    <h1>
+        Event Photo Booth
+    </h1>
+
+    <p>
+        Capture the moment, share the memory,
+        and see everyone's photos in one place.
+    </p>
+
+</section>
+
+
+<!-- MAIN -->
+
+<main class="container">
+
+    <!-- CAMERA -->
+
+    <div class="camera-card">
+
+        <div class="camera-icon">
+            📸
         </div>
 
-        <h1>
-            Event Photo Booth
-        </h1>
+        <h2>
+            Capture Your Moment
+        </h2>
 
         <p>
-            Capture the moment, share the memory,
-            and see everyone's photos in one place.
+            Take a photo and share it
+            with everyone at the event.
         </p>
 
-    </section>
+        <label
+            class="camera-button"
+            for="photoInput"
+        >
+            📷 &nbsp; TAKE A PHOTO
+        </label>
 
+        <input
+            type="file"
+            id="photoInput"
+            accept="image/*"
+            capture="environment"
+        >
 
-    <!-- MAIN -->
+        <div id="status"></div>
 
-    <main class="container">
+    </div>
 
 
-        <!-- CAMERA -->
+    <!-- GALLERY -->
 
-        <div class="camera-card">
+    <div class="gallery-header">
 
-            <div class="camera-icon">
-                📸
-            </div>
+        <h2>
+            Event Gallery
+        </h2>
 
-            <h2>
-                Capture Your Moment
-            </h2>
+        <span id="photoCount">
+            Loading...
+        </span>
 
-            <p>
-                Take a photo and share it
-                with everyone at the event.
-            </p>
+    </div>
 
-            <label
-                class="camera-button"
-                for="photoInput"
-            >
-                📷 &nbsp; TAKE A PHOTO
-            </label>
+    <div id="gallery"></div>
 
-            <input
-                type="file"
-                id="photoInput"
-                accept="image/*"
-                capture="environment"
-            >
+</main>
 
-            <div id="status"></div>
 
-        </div>
+<footer>
+    Made for unforgettable moments ✨
+</footer>
 
 
-        <!-- GALLERY -->
+<script>
 
-        <div class="gallery-header">
+    /* =====================================
+       CLOUDINARY SETTINGS
+    ===================================== */
 
-            <h2>
-                Event Gallery
-            </h2>
+    const CLOUD_NAME = "aiv9r6zk";
 
-            <span id="photoCount">
-                Loading...
-            </span>
+    /*
+     * IMPORTANT:
+     * This must EXACTLY match your
+     * Cloudinary unsigned upload preset.
+     */
 
-        </div>
+    const UPLOAD_PRESET = "Event Photo";
 
-        <div id="gallery"></div>
+    /*
+     * This tag is used for the gallery.
+     */
 
-    </main>
+    const GALLERY_TAG = "event_gallery";
 
 
-    <footer>
-        Made for unforgettable moments ✨
-    </footer>
+    /* =====================================
+       PAGE ELEMENTS
+    ===================================== */
 
+    const photoInput =
+        document.getElementById("photoInput");
 
-    <script>
+    const gallery =
+        document.getElementById("gallery");
 
-        /* =========================
-           CLOUDINARY SETTINGS
-        ========================= */
+    const status =
+        document.getElementById("status");
 
-        const CLOUD_NAME = "aiv9r6zk";
+    const photoCount =
+        document.getElementById("photoCount");
 
-        const UPLOAD_PRESET = "event photo";
 
-        const GALLERY_TAG = "event_gallery";
+    let uploadedPhotos = 0;
 
 
-        /* =========================
-           PAGE ELEMENTS
-        ========================= */
+    /* =====================================
+       PHOTO SELECTION
+    ===================================== */
 
-        const photoInput =
-            document.getElementById("photoInput");
+    photoInput.addEventListener(
+        "change",
+        async function () {
 
-        const gallery =
-            document.getElementById("gallery");
+            const file = this.files[0];
 
-        const status =
-            document.getElementById("status");
-
-        const photoCount =
-            document.getElementById("photoCount");
-
-
-        let uploadedPhotos = 0;
-
-
-        /* =========================
-           PHOTO SELECTION
-        ========================= */
-
-        photoInput.addEventListener(
-            "change",
-            async function () {
-
-                const file = this.files[0];
-
-                if (!file) {
-                    return;
-                }
-
-                try {
-
-                    /*
-                     * STEP 1:
-                     * COMPRESS PHOTO
-                     */
-
-                    status.textContent =
-                        "Preparing photo...";
-
-
-                    const compressedFile =
-                        await compressImage(file);
-
-
-                    /*
-                     * STEP 2:
-                     * UPLOAD TO CLOUDINARY
-                     */
-
-                    status.textContent =
-                        "Uploading photo...";
-
-
-                    const formData =
-                        new FormData();
-
-
-                    formData.append(
-                        "file",
-                        compressedFile
-                    );
-
-
-                    formData.append(
-                        "upload_preset",
-                        UPLOAD_PRESET
-                    );
-
-
-                    formData.append(
-                        "tags",
-                        GALLERY_TAG
-                    );
-
-
-                    const uploadUrl =
-                        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-
-
-                    const response =
-                        await fetch(
-                            uploadUrl,
-                            {
-                                method: "POST",
-                                body: formData
-                            }
-                        );
-
-
-                    const data =
-                        await response.json();
-
-
-                    console.log(
-                        "Cloudinary upload:",
-                        data
-                    );
-
-
-                    /*
-                     * STEP 3:
-                     * CHECK RESULT
-                     */
-
-                    if (data.secure_url) {
-
-                        /*
-                         * Show photo immediately
-                         */
-
-                        addPhoto(
-                            data.secure_url
-                        );
-
-
-                        uploadedPhotos++;
-
-
-                        photoCount.textContent =
-                            uploadedPhotos +
-                            (
-                                uploadedPhotos === 1
-                                    ? " Photo"
-                                    : " Photos"
-                            );
-
-
-                        status.textContent =
-                            "✓ Photo uploaded successfully!";
-
-
-                    } else {
-
-                        console.error(
-                            "Cloudinary error:",
-                            data
-                        );
-
-
-                        status.textContent =
-                            "❌ Unable to upload the photo.";
-
-                    }
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Upload error:",
-                        error
-                    );
-
-
-                    status.textContent =
-                        "❌ Upload failed. Please try again.";
-
-                }
-
-
-                /*
-                 * Allow another photo
-                 */
-
-                photoInput.value = "";
-
+            if (!file) {
+                return;
             }
-        );
 
-
-        /* =========================
-           COMPRESS PHOTO
-        ========================= */
-
-        function compressImage(file) {
-
-            return new Promise(
-                function (resolve, reject) {
-
-                    const img =
-                        new Image();
-
-                    const reader =
-                        new FileReader();
-
-
-                    reader.onload =
-                        function (event) {
-
-                            img.onload =
-                                function () {
-
-                                    const maxWidth = 1600;
-                                    const maxHeight = 1600;
-
-                                    let width =
-                                        img.width;
-
-                                    let height =
-                                        img.height;
-
-
-                                    /*
-                                     * Resize width
-                                     */
-
-                                    if (
-                                        width >
-                                        maxWidth
-                                    ) {
-
-                                        height =
-                                            height *
-                                            (
-                                                maxWidth /
-                                                width
-                                            );
-
-                                        width =
-                                            maxWidth;
-                                    }
-
-
-                                    /*
-                                     * Resize height
-                                     */
-
-                                    if (
-                                        height >
-                                        maxHeight
-                                    ) {
-
-                                        width =
-                                            width *
-                                            (
-                                                maxHeight /
-                                                height
-                                            );
-
-                                        height =
-                                            maxHeight;
-                                    }
-
-
-                                    /*
-                                     * Canvas
-                                     */
-
-                                    const canvas =
-                                        document.createElement(
-                                            "canvas"
-                                        );
-
-
-                                    canvas.width =
-                                        width;
-
-                                    canvas.height =
-                                        height;
-
-
-                                    const ctx =
-                                        canvas.getContext(
-                                            "2d"
-                                        );
-
-
-                                    ctx.drawImage(
-                                        img,
-                                        0,
-                                        0,
-                                        width,
-                                        height
-                                    );
-
-
-                                    /*
-                                     * Convert to JPEG
-                                     */
-
-                                    canvas.toBlob(
-                                        function (blob) {
-
-                                            if (!blob) {
-
-                                                reject(
-                                                    new Error(
-                                                        "Compression failed"
-                                                    )
-                                                );
-
-                                                return;
-                                            }
-
-
-                                            const compressedFile =
-                                                new File(
-                                                    [blob],
-                                                    "event-photo.jpg",
-                                                    {
-                                                        type:
-                                                            "image/jpeg"
-                                                    }
-                                                );
-
-
-                                            resolve(
-                                                compressedFile
-                                            );
-
-                                        },
-                                        "image/jpeg",
-                                        0.80
-                                    );
-
-                                };
-
-
-                            img.onerror =
-                                function () {
-
-                                    reject(
-                                        new Error(
-                                            "Unable to read image"
-                                        )
-                                    );
-
-                                };
-
-
-                            img.src =
-                                event.target.result;
-
-                        };
-
-
-                    reader.onerror =
-                        function () {
-
-                            reject(
-                                new Error(
-                                    "Unable to read file"
-                                )
-                            );
-
-                        };
-
-
-                    reader.readAsDataURL(file);
-
-                }
-            );
-
-        }
-
-
-        /* =========================
-           DISPLAY PHOTO
-        ========================= */
-
-        function addPhoto(url) {
-
-            const image =
-                document.createElement("img");
-
-
-            image.src =
-                url;
-
-
-            image.className =
-                "photo";
-
-
-            image.loading =
-                "lazy";
-
-
-            image.alt =
-                "event photo";
-
-
-            gallery.prepend(
-                image
-            );
-
-        }
-
-
-        /* =========================
-           LOAD SAVED PHOTOS
-        ========================= */
-
-        async function loadGallery() {
+            console.log("Selected file:", file);
 
             try {
 
-                photoCount.textContent =
-                    "Loading...";
+                /* ---------------------------------
+                   STEP 1 - CHECK FILE
+                --------------------------------- */
 
-
-                /*
-                 * Cloudinary Resource List
-                 */
-
-                const listUrl =
-                    `https://res.cloudinary.com/${CLOUD_NAME}/image/list/tag/${GALLERY_TAG}.json`;
-
-
-                const response =
-                    await fetch(listUrl);
-
-
-                if (!response.ok) {
+                if (!file.type.startsWith("image/")) {
 
                     throw new Error(
-                        "Cloudinary gallery request failed"
+                        "The selected file is not an image."
                     );
 
                 }
 
+
+                status.textContent =
+                    "Preparing photo...";
+
+
+                /* ---------------------------------
+                   STEP 2 - COMPRESS
+                --------------------------------- */
+
+                const compressedFile =
+                    await compressImage(file);
+
+
+                console.log(
+                    "Compressed file:",
+                    compressedFile
+                );
+
+
+                status.textContent =
+                    "Uploading photo...";
+
+
+                /* ---------------------------------
+                   STEP 3 - CREATE FORM DATA
+                --------------------------------- */
+
+                const formData =
+                    new FormData();
+
+
+                formData.append(
+                    "file",
+                    compressedFile
+                );
+
+
+                formData.append(
+                    "upload_preset",
+                    UPLOAD_PRESET
+                );
+
+
+                /*
+                 * Tags are supported in unsigned
+                 * uploads.
+                 */
+
+                formData.append(
+                    "tags",
+                    GALLERY_TAG
+                );
+
+
+                /* ---------------------------------
+                   STEP 4 - CLOUDINARY UPLOAD
+                --------------------------------- */
+
+                const uploadUrl =
+                    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+
+
+                console.log(
+                    "Uploading to:",
+                    uploadUrl
+                );
+
+
+                console.log(
+                    "Upload preset:",
+                    UPLOAD_PRESET
+                );
+
+
+                const response =
+                    await fetch(
+                        uploadUrl,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                /* ---------------------------------
+                   STEP 5 - READ CLOUDINARY RESPONSE
+                --------------------------------- */
 
                 const data =
                     await response.json();
 
 
                 console.log(
-                    "Saved gallery:",
+                    "Cloudinary response:",
                     data
                 );
 
 
-                gallery.innerHTML =
-                    "";
+                /* ---------------------------------
+                   STEP 6 - CHECK HTTP ERROR
+                --------------------------------- */
+
+                if (!response.ok) {
+
+                    console.error(
+                        "Cloudinary HTTP error:",
+                        data
+                    );
+
+                    throw new Error(
+                        data.error?.message ||
+                        `Cloudinary returned HTTP ${response.status}`
+                    );
+
+                }
 
 
-                if (
-                    data.resources &&
-                    data.resources.length > 0
-                ) {
+                /* ---------------------------------
+                   STEP 7 - CHECK SECURE URL
+                --------------------------------- */
+
+                if (!data.secure_url) {
+
+                    console.error(
+                        "No secure_url:",
+                        data
+                    );
+
+                    throw new Error(
+                        data.error?.message ||
+                        "Cloudinary did not return an image URL."
+                    );
+
+                }
 
 
-                    /*
-                     * Newest photos first
-                     */
+                /* ---------------------------------
+                   SUCCESS
+                --------------------------------- */
 
-                    const photos =
-                        [...data.resources].reverse();
-
-
-                    photos.forEach(
-                        function (photo) {
+                console.log(
+                    "UPLOAD SUCCESS:",
+                    data.secure_url
+                );
 
 
-                            /*
-                             * Build Cloudinary URL
-                             */
+                /*
+                 * Show uploaded photo immediately.
+                 */
 
-                            const extension =
-                                photo.format
-                                    ? "." + photo.format
-                                    : "";
-
-
-                            const photoUrl =
-                                `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${photo.public_id}${extension}`;
+                addPhoto(
+                    data.secure_url
+                );
 
 
-                            addPhoto(
-                                photoUrl
-                            );
+                uploadedPhotos++;
 
-                        }
+
+                photoCount.textContent =
+                    uploadedPhotos +
+                    (
+                        uploadedPhotos === 1
+                            ? " Photo"
+                            : " Photos"
                     );
 
 
-                    uploadedPhotos =
-                        photos.length;
+                status.textContent =
+                    "✓ Photo uploaded successfully!";
 
 
-                    photoCount.textContent =
-                        uploadedPhotos +
-                        (
-                            uploadedPhotos === 1
-                                ? " Photo"
-                                : " Photos"
-                        );
+                /*
+                 * Refresh gallery after upload.
+                 *
+                 * Resource List can sometimes take
+                 * a little time to show a new asset.
+                 */
 
-
-                } else {
-
-                    photoCount.textContent =
-                        "No photos yet";
-
-                }
+                setTimeout(
+                    loadGallery,
+                    3000
+                );
 
 
             } catch (error) {
 
                 console.error(
-                    "Gallery error:",
+                    "UPLOAD ERROR:",
                     error
                 );
 
 
-                photoCount.textContent =
-                    "Gallery unavailable";
+                status.innerHTML =
+                    "❌ Upload failed.<br>" +
+                    "<small>" +
+                    escapeHtml(error.message) +
+                    "</small>";
 
             }
 
+
+            /*
+             * Allow another photo to be selected.
+             */
+
+            photoInput.value = "";
+
+        }
+    );
+
+
+    /* =====================================
+       COMPRESS IMAGE
+    ===================================== */
+
+    function compressImage(file) {
+
+        return new Promise(
+            function (resolve, reject) {
+
+                const img =
+                    new Image();
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    function (event) {
+
+                        img.onload =
+                            function () {
+
+                                const maxWidth = 1600;
+                                const maxHeight = 1600;
+
+                                let width =
+                                    img.width;
+
+                                let height =
+                                    img.height;
+
+
+                                /*
+                                 * Resize width
+                                 */
+
+                                if (
+                                    width >
+                                    maxWidth
+                                ) {
+
+                                    height =
+                                        height *
+                                        (
+                                            maxWidth /
+                                            width
+                                        );
+
+                                    width =
+                                        maxWidth;
+                                }
+
+
+                                /*
+                                 * Resize height
+                                 */
+
+                                if (
+                                    height >
+                                    maxHeight
+                                ) {
+
+                                    width =
+                                        width *
+                                        (
+                                            maxHeight /
+                                            height
+                                        );
+
+                                    height =
+                                        maxHeight;
+                                }
+
+
+                                const canvas =
+                                    document.createElement(
+                                        "canvas"
+                                    );
+
+
+                                canvas.width =
+                                    Math.round(width);
+
+                                canvas.height =
+                                    Math.round(height);
+
+
+                                const ctx =
+                                    canvas.getContext(
+                                        "2d"
+                                    );
+
+
+                                ctx.drawImage(
+                                    img,
+                                    0,
+                                    0,
+                                    canvas.width,
+                                    canvas.height
+                                );
+
+
+                                /*
+                                 * Convert to JPEG
+                                 */
+
+                                canvas.toBlob(
+                                    function (blob) {
+
+                                        if (!blob) {
+
+                                            reject(
+                                                new Error(
+                                                    "Photo compression failed."
+                                                )
+                                            );
+
+                                            return;
+                                        }
+
+
+                                        const compressedFile =
+                                            new File(
+                                                [blob],
+                                                "event-photo.jpg",
+                                                {
+                                                    type:
+                                                        "image/jpeg"
+                                                }
+                                            );
+
+
+                                        resolve(
+                                            compressedFile
+                                        );
+
+                                    },
+                                    "image/jpeg",
+                                    0.80
+                                );
+
+                            };
+
+
+                        img.onerror =
+                            function () {
+
+                                reject(
+                                    new Error(
+                                        "Unable to read the selected image."
+                                    )
+                                );
+
+                            };
+
+
+                        img.src =
+                            event.target.result;
+
+                    };
+
+
+                reader.onerror =
+                    function () {
+
+                        reject(
+                            new Error(
+                                "Unable to read the photo file."
+                            )
+                        );
+
+                    };
+
+
+                reader.readAsDataURL(file);
+
+            }
+        );
+
+    }
+
+
+    /* =====================================
+       DISPLAY PHOTO
+    ===================================== */
+
+    function addPhoto(url) {
+
+        const image =
+            document.createElement("img");
+
+
+        image.src =
+            url;
+
+
+        image.className =
+            "photo";
+
+
+        image.loading =
+            "lazy";
+
+
+        image.alt =
+            "Event Photo";
+
+
+        image.onerror =
+            function () {
+
+                console.error(
+                    "Unable to display:",
+                    url
+                );
+
+            };
+
+
+        gallery.prepend(
+            image
+        );
+
+    }
+
+
+    /* =====================================
+       LOAD SAVED PHOTOS
+    ===================================== */
+
+    async function loadGallery() {
+
+        try {
+
+            photoCount.textContent =
+                "Loading...";
+
+
+            console.log(
+                "Loading Cloudinary gallery..."
+            );
+
+
+            /*
+             * Cloudinary Resource List
+             */
+
+            const listUrl =
+                `https://res.cloudinary.com/${CLOUD_NAME}/image/list/tag/${encodeURIComponent(GALLERY_TAG)}.json?${Date.now()}`;
+
+
+            console.log(
+                "Gallery URL:",
+                listUrl
+            );
+
+
+            const response =
+                await fetch(listUrl);
+
+
+            console.log(
+                "Gallery HTTP status:",
+                response.status
+            );
+
+
+            const responseText =
+                await response.text();
+
+
+            console.log(
+                "Gallery response:",
+                responseText
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Gallery request returned HTTP ${response.status}`
+                );
+
+            }
+
+
+            let data;
+
+            try {
+
+                data =
+                    JSON.parse(responseText);
+
+            } catch (jsonError) {
+
+                throw new Error(
+                    "Cloudinary gallery did not return valid JSON."
+                );
+
+            }
+
+
+            console.log(
+                "Gallery data:",
+                data
+            );
+
+
+            gallery.innerHTML =
+                "";
+
+
+            if (
+                data.resources &&
+                data.resources.length > 0
+            ) {
+
+                /*
+                 * Newest first
+                 */
+
+                const photos =
+                    [...data.resources].reverse();
+
+
+                photos.forEach(
+                    function (photo) {
+
+                        /*
+                         * Use Cloudinary's public ID
+                         * and format.
+                         */
+
+                        let photoUrl =
+                            `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${photo.public_id}`;
+
+
+                        /*
+                         * Add format extension only
+                         * if Cloudinary returned one.
+                         */
+
+                        if (photo.format) {
+
+                            photoUrl +=
+                                "." +
+                                photo.format;
+
+                        }
+
+
+                        console.log(
+                            "Gallery photo:",
+                            photoUrl
+                        );
+
+
+                        addPhoto(
+                            photoUrl
+                        );
+
+                    }
+                );
+
+
+                uploadedPhotos =
+                    photos.length;
+
+
+                photoCount.textContent =
+                    uploadedPhotos +
+                    (
+                        uploadedPhotos === 1
+                            ? " Photo"
+                            : " Photos"
+                    );
+
+
+            } else {
+
+                photoCount.textContent =
+                    "No photos yet";
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "GALLERY ERROR:",
+                error
+            );
+
+
+            photoCount.textContent =
+                "Gallery error";
+
+
+            status.innerHTML =
+                "⚠️ Gallery error:<br>" +
+                "<small>" +
+                escapeHtml(error.message) +
+                "</small>";
+
         }
 
+    }
 
-        /* =========================
-           START
-        ========================= */
 
-        loadGallery();
+    /* =====================================
+       ESCAPE ERROR TEXT
+    ===================================== */
 
-    </script>
+    function escapeHtml(text) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            text;
+
+        return div.innerHTML;
+
+    }
+
+
+    /* =====================================
+       START
+    ===================================== */
+
+    loadGallery();
+
+</script>
+```
 
 </body>
 
